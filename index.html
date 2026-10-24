@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora de Promedio Ponderado</title>
+  
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <!-- Vue 3 -->
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body class="bg-light">
+
+  <div id="app" class="container py-5">
+    <div class="row justify-content-center">
+      <div class="col-md-6 col-lg-5">
+        <div class="card shadow-sm">
+          <div class="card-header bg-primary text-white text-center">
+            <h4 class="mb-0">Calculadora de Promedio Final</h4>
+          </div>
+          <div class="card-body">
+
+            <div class="mb-3">
+              <label class="form-label">Bloque 1 (20%)</label>
+              <input type="number" class="form-control" v-model.number="bloque1" min="0" max="10" step="0.1" placeholder="0 - 10">
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Bloque 2 (20%)</label>
+              <input type="number" class="form-control" v-model.number="bloque2" min="0" max="10" step="0.1" placeholder="0 - 10">
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Bloque 3 (20%)</label>
+              <input type="number" class="form-control" v-model.number="bloque3" min="0" max="10" step="0.1" placeholder="0 - 10">
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label">Proyecto Final (40%)</label>
+              <input type="number" class="form-control" v-model.number="proyecto" min="0" max="10" step="0.1" placeholder="0 - 10">
+            </div>
+
+            <div class="d-grid">
+              <button class="btn btn-success btn-lg" @click="calcularPromedio">
+                Calcular Promedio
+              </button>
+            </div>
+
+            <!-- Resultado -->
+            <div v-if="mostrarResultado" class="mt-4 p-3 text-center rounded" :class="resultadoClass">
+              <h5 class="mb-1">Promedio Final</h5>
+              <h2 class="fw-bold">{{ promedio.toFixed(2) }}</h2>
+              <small>{{ mensaje }}</small>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const { createApp } = Vue;
+
+    createApp({
+      data() {
+        return {
+          bloque1: null,
+          bloque2: null,
+          bloque3: null,
+          proyecto: null,
+          promedio: 0,
+          mostrarResultado: false,
+          mensaje: ''
+        }
+      },
+      methods: {
+        calcularPromedio() {
+          // Validar que todos los campos tengan valor
+          if (this.bloque1 === null || this.bloque2 === null || this.bloque3 === null || this.proyecto === null) {
+            alert('Por favor ingresa todas las notas');
+            return;
+          }
+
+          // Cálculo del promedio ponderado
+          // Bloque 1 (20%) + Bloque 2 (20%) + Bloque 3 (20%) + Proyecto (40%)
+          this.promedio = (this.bloque1 * 0.20) + 
+                          (this.bloque2 * 0.20) + 
+                          (this.bloque3 * 0.20) + 
+                          (this.proyecto * 0.40);
+
+          this.mostrarResultado = true;
+
+          // Mensaje según el resultado
+          if (this.promedio >= 6) {
+            this.mensaje = '¡Aprobado!';
+          } else {
+            this.mensaje = 'Reprobado';
+          }
+        }
+      },
+      computed: {
+        resultadoClass() {
+          return this.promedio >= 6 ? 'bg-success text-white' : 'bg-danger text-white';
+        }
+      }
+    }).mount('#app');
+  </script>
+
+</body>
+</html>
